@@ -34,10 +34,11 @@ import (
 	"k8s.io/klog/v2"
 
 	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
-	workloadcliplugin "github.com/kcp-dev/kcp/pkg/cliplugins/workload/plugin"
 	"github.com/kcp-dev/syncer/pkg/logging"
 	"github.com/kcp-dev/syncer/pkg/syncer/shared"
 )
+
+const syncerIDPrefix = "kcp-syncer-"
 
 func deepEqualFinalizersAndStatus(oldUnstrob, newUnstrob *unstructured.Unstructured) bool {
 	newFinalizers := newUnstrob.GetFinalizers()
@@ -58,8 +59,7 @@ func (c *Controller) process(ctx context.Context, gvr schema.GroupVersionResourc
 		logger.Error(err, "Invalid key")
 		return nil
 	}
-	// TODO(sttts): do not reference the cli plugin here
-	if strings.HasPrefix(downstreamNamespace, workloadcliplugin.SyncerIDPrefix) {
+	if strings.HasPrefix(downstreamNamespace, syncerIDPrefix) {
 		// skip syncer namespace
 		return nil
 	}
