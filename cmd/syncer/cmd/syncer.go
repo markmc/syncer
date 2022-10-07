@@ -29,7 +29,7 @@ import (
 	"k8s.io/klog/v2"
 
 	synceroptions "github.com/kcp-dev/syncer/cmd/syncer/options"
-	kcpfeatures "github.com/kcp-dev/kcp/pkg/features"
+	syncerfeatures "github.com/kcp-dev/syncer/pkg/features"
 	"github.com/kcp-dev/syncer/pkg/syncer"
 )
 
@@ -41,7 +41,7 @@ func NewSyncerCommand() *cobra.Command {
 		Use:   "syncer",
 		Short: "Synchronizes resources in `kcp` assigned to the clusters",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if err := options.Logs.ValidateAndApply(kcpfeatures.DefaultFeatureGate); err != nil {
+			if err := options.Logs.ValidateAndApply(syncerfeatures.DefaultFeatureGate); err != nil {
 				return err
 			}
 			if err := options.Complete(); err != nil {

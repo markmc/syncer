@@ -39,11 +39,11 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
 
+	"github.com/kcp-dev/kcp/pkg/logging"
 	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
 	kcpclient "github.com/kcp-dev/syncer/pkg/client/clientset/versioned"
 	kcpinformers "github.com/kcp-dev/syncer/pkg/client/informers/externalversions"
-	kcpfeatures "github.com/kcp-dev/kcp/pkg/features"
-	"github.com/kcp-dev/kcp/pkg/logging"
+	syncerfeatures "github.com/kcp-dev/syncer/pkg/features"
 	"github.com/kcp-dev/syncer/pkg/syncer/namespace"
 	"github.com/kcp-dev/syncer/pkg/syncer/resourcesync"
 	"github.com/kcp-dev/syncer/pkg/syncer/spec"
@@ -252,7 +252,7 @@ func StartSyncer(ctx context.Context, cfg *SyncerConfig, numSyncerThreads int, i
 	go downstreamNamespaceController.Start(ctx, numSyncerThreads)
 	go upstreamNamespaceController.Start(ctx, numSyncerThreads)
 
-	if kcpfeatures.DefaultFeatureGate.Enabled(kcpfeatures.SyncerTunnel) {
+	if syncerfeatures.DefaultFeatureGate.Enabled(syncerfeatures.SyncerTunnel) {
 		go startSyncerTunnel(ctx, upstreamConfig, downstreamConfig, cfg.SyncTargetWorkspace, cfg.SyncTargetName)
 	}
 
