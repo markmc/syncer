@@ -41,7 +41,7 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
 
-	"github.com/kcp-dev/kcp/pkg/logging"
+	"github.com/kcp-dev/syncer/pkg/logging"
 	"github.com/kcp-dev/syncer/third_party/keyfunctions"
 )
 

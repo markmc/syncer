@@ -28,7 +28,7 @@ import (
 	"k8s.io/klog/v2"
 
 	"github.com/kcp-dev/syncer/pkg/dns/plugin/nsmap"
-	"github.com/kcp-dev/kcp/pkg/logging"
+	"github.com/kcp-dev/syncer/pkg/logging"
 	"github.com/kcp-dev/syncer/pkg/syncer/shared"
 )
 

@@ -39,7 +39,7 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
 
-	"github.com/kcp-dev/kcp/pkg/logging"
+	"github.com/kcp-dev/syncer/pkg/logging"
 	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
 	kcpclient "github.com/kcp-dev/syncer/pkg/client/clientset/versioned"
 	kcpinformers "github.com/kcp-dev/syncer/pkg/client/informers/externalversions"

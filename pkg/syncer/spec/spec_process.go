@@ -40,7 +40,7 @@ import (
 	"k8s.io/utils/pointer"
 
 	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
-	"github.com/kcp-dev/kcp/pkg/logging"
+	"github.com/kcp-dev/syncer/pkg/logging"
 	"github.com/kcp-dev/syncer/pkg/syncer/shared"
 )
 

@@ -35,7 +35,7 @@ import (
 
 	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
 	workloadcliplugin "github.com/kcp-dev/kcp/pkg/cliplugins/workload/plugin"
-	"github.com/kcp-dev/kcp/pkg/logging"
+	"github.com/kcp-dev/syncer/pkg/logging"
 	"github.com/kcp-dev/syncer/pkg/syncer/shared"
 )
 

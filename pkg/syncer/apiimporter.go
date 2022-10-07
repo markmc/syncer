@@ -34,14 +34,14 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
 
+	"github.com/kcp-dev/kcp/pkg/crdpuller"
+	clusterctl "github.com/kcp-dev/kcp/pkg/reconciler/workload/basecontroller"
 	apiresourcev1alpha1 "github.com/kcp-dev/syncer/pkg/apis/apiresource/v1alpha1"
 	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
 	kcpclient "github.com/kcp-dev/syncer/pkg/client/clientset/versioned"
 	kcpinformers "github.com/kcp-dev/syncer/pkg/client/informers/externalversions"
 	workloadlisters "github.com/kcp-dev/syncer/pkg/client/listers/workload/v1alpha1"
-	"github.com/kcp-dev/kcp/pkg/crdpuller"
-	"github.com/kcp-dev/kcp/pkg/logging"
-	clusterctl "github.com/kcp-dev/kcp/pkg/reconciler/workload/basecontroller"
+	"github.com/kcp-dev/syncer/pkg/logging"
 )
 
 var clusterKind = reflect.TypeOf(workloadv1alpha1.SyncTarget{}).Name()

@@ -52,7 +52,7 @@ import (
 	kcpclient "github.com/kcp-dev/syncer/pkg/client/clientset/versioned"
 	workloadinformers "github.com/kcp-dev/syncer/pkg/client/informers/externalversions/workload/v1alpha1"
 	workloadlisters "github.com/kcp-dev/syncer/pkg/client/listers/workload/v1alpha1"
-	"github.com/kcp-dev/kcp/pkg/logging"
+	"github.com/kcp-dev/syncer/pkg/logging"
 	"github.com/kcp-dev/syncer/third_party/keyfunctions"
 )
 

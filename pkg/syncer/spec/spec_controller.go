@@ -40,7 +40,7 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
 
-	"github.com/kcp-dev/kcp/pkg/logging"
+	"github.com/kcp-dev/syncer/pkg/logging"
 	"github.com/kcp-dev/syncer/pkg/syncer/resourcesync"
 	"github.com/kcp-dev/syncer/pkg/syncer/shared"
 	specmutators "github.com/kcp-dev/syncer/pkg/syncer/spec/mutators"
