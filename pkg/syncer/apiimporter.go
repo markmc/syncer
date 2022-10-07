@@ -34,7 +34,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
 
-	clusterctl "github.com/kcp-dev/kcp/pkg/reconciler/workload/basecontroller"
 	apiresourcev1alpha1 "github.com/kcp-dev/syncer/pkg/apis/apiresource/v1alpha1"
 	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
 	kcpclient "github.com/kcp-dev/syncer/pkg/client/clientset/versioned"
@@ -56,6 +55,18 @@ func syncTargetAsOwnerReference(obj *workloadv1alpha1.SyncTarget, controller boo
 	}
 }
 
+const gvrForSyncTargetInLogicalClusterIndexName = "GVRForSyncTargetInLogicalCluster"
+
+func getGVRForSyncTargetInLogicalClusterIndexKey(syncTarget string, clusterName logicalcluster.Name, gvr metav1.GroupVersionResource) string {
+	return syncTarget + "$$" + clusterName.String() + "$" + gvr.String()
+}
+
+const syncTargetInLogicalClusterIndexName = "SyncTargetInLogicalCluster"
+
+func getSyncTargetInLogicalClusterIndexKey(syncTarget string, clusterName logicalcluster.Name) string {
+	return syncTarget + "/" + clusterName.String()
+}
+
 func NewAPIImporter(
 	upstreamConfig, downstreamConfig *rest.Config,
 	kcpInformerFactory kcpinformers.SharedInformerFactory,
@@ -75,15 +86,15 @@ func NewAPIImporter(
 	importIndexer := kcpInformerFactory.Apiresource().V1alpha1().APIResourceImports().Informer().GetIndexer()
 
 	indexers := map[string]cache.IndexFunc{
-		clusterctl.GVRForLocationInLogicalClusterIndexName: func(obj interface{}) ([]string, error) {
+		gvrForSyncTargetInLogicalClusterIndexName: func(obj interface{}) ([]string, error) {
 			if apiResourceImport, ok := obj.(*apiresourcev1alpha1.APIResourceImport); ok {
-				return []string{clusterctl.GetGVRForLocationInLogicalClusterIndexKey(apiResourceImport.Spec.Location, logicalcluster.From(apiResourceImport), apiResourceImport.GVR())}, nil
+				return []string{getGVRForSyncTargetInLogicalClusterIndexKey(apiResourceImport.Spec.Location, logicalcluster.From(apiResourceImport), apiResourceImport.GVR())}, nil
 			}
 			return []string{}, nil
 		},
-		clusterctl.LocationInLogicalClusterIndexName: func(obj interface{}) ([]string, error) {
+		syncTargetInLogicalClusterIndexName: func(obj interface{}) ([]string, error) {
 			if apiResourceImport, ok := obj.(*apiresourcev1alpha1.APIResourceImport); ok {
-				return []string{clusterctl.GetLocationInLogicalClusterIndexKey(apiResourceImport.Spec.Location, logicalcluster.From(apiResourceImport))}, nil
+				return []string{getSyncTargetInLogicalClusterIndexKey(apiResourceImport.Spec.Location, logicalcluster.From(apiResourceImport))}, nil
 			}
 			return []string{}, nil
 		},
@@ -153,8 +164,8 @@ func (i *APIImporter) Stop(ctx context.Context) {
 	logger.Info("stopping API Importer")
 
 	objs, err := i.apiresourceImportIndexer.ByIndex(
-		clusterctl.LocationInLogicalClusterIndexName,
-		clusterctl.GetLocationInLogicalClusterIndexKey(i.syncTargetName, i.logicalClusterName),
+		syncTargetInLogicalClusterIndexName,
+		getSyncTargetInLogicalClusterIndexKey(i.syncTargetName, i.logicalClusterName),
 	)
 	if err != nil {
 		logger.Error(err, "error trying to list APIResourceImport objects")
@@ -214,8 +225,8 @@ func (i *APIImporter) ImportAPIs(ctx context.Context) {
 		)
 
 		objs, err := i.apiresourceImportIndexer.ByIndex(
-			clusterctl.GVRForLocationInLogicalClusterIndexName,
-			clusterctl.GetGVRForLocationInLogicalClusterIndexKey(i.syncTargetName, i.logicalClusterName, gvr),
+			gvrForSyncTargetInLogicalClusterIndexName,
+			getGVRForSyncTargetInLogicalClusterIndexKey(i.syncTargetName, i.logicalClusterName, gvr),
 		)
 		if err != nil {
 			logger.Error(err, "error pulling CRDs")
@@ -295,8 +306,8 @@ func (i *APIImporter) ImportAPIs(ctx context.Context) {
 	for _, gvrToRemove := range gvrsToRemove.UnsortedList() {
 		gvr := i.SyncedGVRs[gvrToRemove]
 		objs, err := i.apiresourceImportIndexer.ByIndex(
-			clusterctl.GVRForLocationInLogicalClusterIndexName,
-			clusterctl.GetGVRForLocationInLogicalClusterIndexKey(i.syncTargetName, i.logicalClusterName, gvr),
+			gvrForSyncTargetInLogicalClusterIndexName,
+			getGVRForSyncTargetInLogicalClusterIndexKey(i.syncTargetName, i.logicalClusterName, gvr),
 		)
 		logger := logger.WithValues(
 			"group", gvr.Group,
