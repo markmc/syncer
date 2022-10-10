@@ -39,11 +39,11 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
 
-	"github.com/kcp-dev/syncer/pkg/logging"
 	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
 	kcpclient "github.com/kcp-dev/syncer/pkg/client/clientset/versioned"
 	kcpinformers "github.com/kcp-dev/syncer/pkg/client/informers/externalversions"
 	syncerfeatures "github.com/kcp-dev/syncer/pkg/features"
+	"github.com/kcp-dev/syncer/pkg/logging"
 	"github.com/kcp-dev/syncer/pkg/syncer/namespace"
 	"github.com/kcp-dev/syncer/pkg/syncer/resourcesync"
 	"github.com/kcp-dev/syncer/pkg/syncer/spec"
@@ -198,6 +198,7 @@ func StartSyncer(ctx context.Context, cfg *SyncerConfig, numSyncerThreads int, i
 	dnsIP := ""
 	// Get the DNS IP. The DNS service cannot be recreated as existing dnsConfig won't be updated.
 	err = wait.PollImmediate(2*time.Second, time.Minute, func() (bool, error) {
+		logger.Info(fmt.Sprintf("performing a DNS lookup of %s", cfg.DNSServer))
 		ips, err := net.LookupIP(cfg.DNSServer)
 		if len(ips) == 0 || err != nil {
 			return false, nil //nolint:nilerr
@@ -206,7 +207,7 @@ func StartSyncer(ctx context.Context, cfg *SyncerConfig, numSyncerThreads int, i
 		return true, nil
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("DNS lookup of %s failed: %s", cfg.DNSServer, err)
 	}
 
 	logger.Info("Creating spec syncer")
