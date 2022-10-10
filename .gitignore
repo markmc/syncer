@@ -1,0 +1,9 @@
+*.log
+coverage.*
+tools
+build
+.vscode
+
+# JetBrains IDE files
+.idea/
+*.iml
