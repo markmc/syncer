@@ -100,6 +100,12 @@ build: require-jq require-go require-git verify-go-versions ## Build the project
 	GOOS=$(OS) GOARCH=$(ARCH) go build $(BUILDFLAGS) -ldflags="$(LDFLAGS)" -o bin $(WHAT)
 .PHONY: build
 
+.PHONY: build-kind-images
+build-kind-images-ko: require-ko
+	$(eval SYNCER_IMAGE=$(shell KO_DOCKER_REPO=kind.local ko build --platform=linux/$(ARCH) ./cmd/syncer))
+build-kind-images: build-kind-images-ko
+	test -n "$(SYNCER_IMAGE)" || (echo Failed to create syncer image; exit 1)
+
 install: WHAT ?= ./cmd/...
 install:
 	GOOS=$(OS) GOARCH=$(ARCH) go install -ldflags="$(LDFLAGS)" $(WHAT)
