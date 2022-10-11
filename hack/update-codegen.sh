@@ -36,13 +36,13 @@ cd pkg/apis
     output:crd:artifacts:config=../../config/crds
 cd -
 
-#for CRD in ./config/crds/*.yaml; do
-#    if [ -f "${CRD}-patch" ]; then
-#        echo "Applying ${CRD}"
-#        ${YAML_PATCH} -o "${CRD}-patch" < "${CRD}" > "${CRD}.patched"
-#        mv "${CRD}.patched" "${CRD}"
-#    fi
-#done
+for CRD in ./config/crds/*.yaml; do
+    if [ -f "${CRD}-patch" ]; then
+        echo "Applying ${CRD}"
+        ${YAML_PATCH} -o "${CRD}-patch" < "${CRD}" > "${CRD}.patched"
+        mv "${CRD}.patched" "${CRD}"
+    fi
+done
 
 #${CONTROLLER_GEN} \
 #    crd \
@@ -51,4 +51,4 @@ cd -
 #    paths="./test/e2e/reconciler/cluster/..." \
 #    output:crd:artifacts:config=test/e2e/reconciler/cluster/
 
-#go run ./cmd/apigen --input-dir ./config/crds --output-dir  ./config/root-phase0
+../kcp/bin/apigen --input-dir ./config/crds --output-dir ./config/bootstrap

@@ -35,6 +35,11 @@ CONTROLLER_GEN_BIN := controller-gen
 CONTROLLER_GEN := $(TOOLS_DIR)/$(CONTROLLER_GEN_BIN)-$(CONTROLLER_GEN_VER)
 export CONTROLLER_GEN # so hack scripts can use it
 
+YAML_PATCH_VER ?= v0.0.11
+YAML_PATCH_BIN := yaml-patch
+YAML_PATCH := $(TOOLS_DIR)/$(YAML_PATCH_BIN)-$(YAML_PATCH_VER)
+export YAML_PATCH # so hack scripts can use it
+
 OPENSHIFT_GOIMPORTS_VER := c72f1dc2e3aacfa00aece3391d938c9bc734e791
 OPENSHIFT_GOIMPORTS_BIN := openshift-goimports
 OPENSHIFT_GOIMPORTS := $(TOOLS_DIR)/$(OPENSHIFT_GOIMPORTS_BIN)-$(OPENSHIFT_GOIMPORTS_VER)
@@ -117,11 +122,14 @@ vendor: ## Vendor the dependencies
 	go mod vendor
 .PHONY: vendor
 
-tools: $(GOLANGCI_LINT) $(GOTESTSUM) $(OPENSHIFT_GOIMPORTS)
+tools: $(GOLANGCI_LINT) $(CONTROLLER_GEN) $(YAML_PATCH) $(GOTESTSUM) $(OPENSHIFT_GOIMPORTS)
 .PHONY: tools
 
 $(CONTROLLER_GEN):
 	GOBIN=$(TOOLS_GOBIN_DIR) $(GO_INSTALL) sigs.k8s.io/controller-tools/cmd/controller-gen $(CONTROLLER_GEN_BIN) $(CONTROLLER_GEN_VER)
+
+$(YAML_PATCH):
+	GOBIN=$(TOOLS_GOBIN_DIR) $(GO_INSTALL) github.com/pivotal-cf/yaml-patch/cmd/yaml-patch $(YAML_PATCH_BIN) $(YAML_PATCH_VER)
 
 $(GOTESTSUM):
 	GOBIN=$(TOOLS_GOBIN_DIR) $(GO_INSTALL) gotest.tools/gotestsum $(GOTESTSUM_BIN) $(GOTESTSUM_VER)

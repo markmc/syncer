@@ -1,0 +1,10 @@
+apiVersion: apis.kcp.dev/v1alpha1
+kind: APIExport
+metadata:
+  creationTimestamp: null
+  name: apiresource.kcp.dev
+spec:
+  latestResourceSchemas:
+  - v221011-3d1fb53.apiresourceimports.apiresource.kcp.dev
+  - v221011-3d1fb53.negotiatedapiresources.apiresource.kcp.dev
+status: {}
