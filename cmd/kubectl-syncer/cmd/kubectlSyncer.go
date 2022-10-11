@@ -28,16 +28,14 @@ import (
 	"k8s.io/component-base/version"
 	"k8s.io/klog/v2"
 
-	crdcmd "github.com/kcp-dev/syncer/pkg/cliplugins/crd/cmd"
 	workloadcmd "github.com/kcp-dev/syncer/pkg/cliplugins/workload/cmd"
-	workspacecmd "github.com/kcp-dev/syncer/pkg/cliplugins/workspace/cmd"
 	"github.com/kcp-dev/syncer/pkg/cmd/help"
 )
 
-func KubectlKcpCommand() *cobra.Command {
+func KubectlSyncerCommand() *cobra.Command {
 	root := &cobra.Command{
 		Use:   "kcp",
-		Short: "kubectl plugin for KCP",
+		Short: "kubectl plugin for KCP syncer",
 		Long: help.Doc(`
 			KCP is the easiest way to manage Kubernetes applications against one or
 			more clusters, by giving you a personal control plane that schedules your
@@ -47,7 +45,7 @@ func KubectlKcpCommand() *cobra.Command {
 			and enabling collaboration for individual teams without having access to
 			the underlying clusters.
 
-			This command provides KCP specific sub-command for kubectl.
+			This command provides KCP syncer specific sub-command for kubectl.
 		`),
 		SilenceUsage:  true,
 		SilenceErrors: true,
@@ -64,13 +62,6 @@ func KubectlKcpCommand() *cobra.Command {
 		root.Version = v
 	}
 
-	workspaceCmd, err := workspacecmd.New(genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr})
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
-	}
-	root.AddCommand(workspaceCmd)
-
 	workloadCmd, err := workloadcmd.New(genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
@@ -78,12 +69,9 @@ func KubectlKcpCommand() *cobra.Command {
 	}
 	root.AddCommand(workloadCmd)
 
-	crdCmd := crdcmd.New(genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr})
-	root.AddCommand(crdCmd)
-
 	return root
 }
 
 func GenerateDocs(filepath string) error {
-	return doc.GenMarkdownTree(KubectlKcpCommand(), filepath)
+	return doc.GenMarkdownTree(KubectlSyncerCommand(), filepath)
 }

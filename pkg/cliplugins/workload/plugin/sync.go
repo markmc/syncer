@@ -49,8 +49,8 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 
-	apiresourcev1alpha1 "github.com/kcp-dev/kcp/pkg/apis/apiresource/v1alpha1"
-	workloadv1alpha1 "github.com/kcp-dev/kcp/pkg/apis/workload/v1alpha1"
+	apiresourcev1alpha1 "github.com/kcp-dev/syncer/pkg/apis/apiresource/v1alpha1"
+	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
 	syncerclient "github.com/kcp-dev/syncer/pkg/client/clientset/versioned"
 	"github.com/kcp-dev/syncer/pkg/cliplugins/base"
 	"github.com/kcp-dev/syncer/pkg/cliplugins/helpers"

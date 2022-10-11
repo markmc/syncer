@@ -29,7 +29,7 @@ func main() {
 	flags := pflag.NewFlagSet("kubectl-syncer", pflag.ExitOnError)
 	pflag.CommandLine = flags
 
-	cmd := cmd.KubectlKcpCommand()
+	cmd := cmd.KubectlSyncerCommand()
 	if err := cmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
