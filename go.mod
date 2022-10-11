@@ -159,3 +159,5 @@ replace (
 	k8s.io/pod-security-admission => github.com/kcp-dev/kubernetes/staging/src/k8s.io/pod-security-admission v0.0.0-20220915135949-eeba459ad2a1
 	k8s.io/sample-apiserver => github.com/kcp-dev/kubernetes/staging/src/k8s.io/sample-apiserver v0.0.0-20220915135949-eeba459ad2a1
 )
+
+replace github.com/kcp-dev/kcp/pkg/apis => github.com/markmc/kcp/pkg/apis wip-control-plane-only

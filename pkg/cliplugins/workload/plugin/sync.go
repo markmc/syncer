@@ -49,11 +49,11 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 
+	tenancyhelper "github.com/kcp-dev/kcp/pkg/apis/tenancy/v1alpha1/helper"
 	apiresourcev1alpha1 "github.com/kcp-dev/syncer/pkg/apis/apiresource/v1alpha1"
 	workloadv1alpha1 "github.com/kcp-dev/syncer/pkg/apis/workload/v1alpha1"
 	syncerclient "github.com/kcp-dev/syncer/pkg/client/clientset/versioned"
 	"github.com/kcp-dev/syncer/pkg/cliplugins/base"
-	"github.com/kcp-dev/syncer/pkg/cliplugins/helpers"
 	syncerfeatures "github.com/kcp-dev/syncer/pkg/features"
 )
 
@@ -204,7 +204,7 @@ func (o *SyncOptions) Run(ctx context.Context) error {
 		return err
 	}
 
-	configURL, currentClusterName, err := helpers.ParseClusterURL(config.Host)
+	configURL, currentClusterName, err := tenancyhelper.ParseClusterURL(config.Host)
 	if err != nil {
 		return fmt.Errorf("current URL %q does not point to cluster workspace", config.Host)
 	}
